@@ -17,13 +17,13 @@ export default function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">B</span>
+                <span className="text-white font-bold text-xl">S</span>
               </div>
-              <span className="text-xl font-bold">BookStore</span>
+              <span className="text-xl font-bold">ShopMicro</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Nhà sách trực tuyến hàng đầu Việt Nam với hàng nghìn đầu sách đa
-              dạng, giá cả cạnh tranh và dịch vụ giao hàng nhanh chóng.
+              Sàn thương mại điện tử hàng đầu Việt Nam — sách, laptop, thời trang
+              với giá cả cạnh tranh và giao hàng nhanh chóng.
             </p>
           </div>
 
@@ -121,7 +121,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center text-gray-400">
                 <FiMail className="w-5 h-5 mr-2" />
-                <span className="text-sm">support@bookstore.vn</span>
+                <span className="text-sm">support@shopmicro.vn</span>
               </li>
             </ul>
 
@@ -151,7 +151,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; 2024 BookStore. All rights reserved.</p>
+          <p>&copy; 2024 ShopMicro. All rights reserved.</p>
         </div>
       </div>
     </footer>

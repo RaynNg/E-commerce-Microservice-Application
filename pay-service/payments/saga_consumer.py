@@ -3,8 +3,11 @@ import json
 import logging
 import threading
 import django
+import requests
 
 logger = logging.getLogger(__name__)
+
+ORDER_SERVICE_URL = os.environ.get("ORDER_SERVICE_URL", "http://order-service:8000")
 
 RABBITMQ_URL = os.environ.get(
     "RABBITMQ_URL", "amqp://bookstore:bookstore@rabbitmq:5672/"
@@ -44,9 +47,20 @@ def _run_consumer():
                         customer_id=data["customer_id"],
                         amount=data["amount"],
                         method=data.get("method", "cod"),
-                        status="pending",
+                        status="completed",
                     )
                     reply = {"success": True, "payment_id": payment.id}
+
+                    # Notify order-service that payment completed
+                    try:
+                        requests.patch(
+                            f"{ORDER_SERVICE_URL}/api/orders/{data['order_id']}/",
+                            json={"status": "paid"},
+                            timeout=5,
+                        )
+                    except Exception as cb_exc:
+                        logger.warning("Order status callback failed (non-critical): %s", cb_exc)
+
                 except Exception as exc:
                     logger.error("Payment reservation failed: %s", exc)
                     reply = {"success": False, "error": str(exc)}

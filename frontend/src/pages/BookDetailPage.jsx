@@ -11,6 +11,7 @@ import {
 import { bookService, catalogService, commentService } from "../services";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { trackBehavior } from "../utils/behaviorTracker";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 
@@ -58,6 +59,7 @@ export default function BookDetailPage() {
       }
     };
     fetchData();
+    trackBehavior(customer?.id, id, "click");
   }, [id]);
 
   const formatPrice = (price) => {
@@ -71,6 +73,7 @@ export default function BookDetailPage() {
     const success = await addItem(book.id, quantity);
     if (success) {
       setQuantity(1);
+      trackBehavior(customer?.id, book.id, "add_to_cart");
     }
   };
 

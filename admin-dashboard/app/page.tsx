@@ -17,7 +17,7 @@ export default function Home() {
         <div className="flex items-center gap-3 mb-2">
           <Database className="w-10 h-10 text-primary" />
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-            Bookstore Admin Studio
+            ShopMicro Admin Studio
           </h1>
         </div>
         <p className="text-muted-foreground text-lg">

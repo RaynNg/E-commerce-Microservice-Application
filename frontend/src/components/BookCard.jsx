@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { trackBehavior } from "../utils/behaviorTracker";
 
 export default function BookCard({ book }) {
   const { addItem } = useCart();
+  const { customer } = useAuth();
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -16,11 +19,16 @@ export default function BookCard({ book }) {
     e.preventDefault();
     e.stopPropagation();
     await addItem(book.id);
+    trackBehavior(customer?.id, book.id, "add_to_cart");
+  };
+
+  const handleCardClick = () => {
+    trackBehavior(customer?.id, book.id, "view");
   };
 
   return (
     <div className="card overflow-hidden group">
-      <Link to={`/books/${book.id}`}>
+      <Link to={`/books/${book.id}`} onClick={handleCardClick}>
         <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
           {book.image_url ? (
             <img

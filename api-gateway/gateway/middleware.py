@@ -31,8 +31,10 @@ PUBLIC_ANY_PREFIXES = (
 # Path prefixes that are public for GET requests only
 PUBLIC_GET_PREFIXES = (
     "/api/books/",
+    "/api/products/",
     "/api/catalogs/",
     "/api/recommendations/",
+    "/api/chatbot/",
 )
 
 

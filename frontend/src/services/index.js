@@ -64,3 +64,18 @@ export const chatService = {
     send: (message, userId, history = []) =>
         api.post('/recommendations/chat/', { message, user_id: userId, history }),
 }
+
+export const productService = {
+    getAll: (params = {}) => api.get('/products/products/', { params }),
+    getById: (id) => api.get(`/products/products/${id}/`),
+    search: (query, productType) =>
+        api.get('/products/products/', { params: { search: query, product_type: productType } }),
+    getByType: (productType) =>
+        api.get('/products/products/', { params: { product_type: productType } }),
+}
+
+export const chatbotService = {
+    send: (message, customerId) =>
+        api.post('/chatbot/chatbot/', { message, customer_id: customerId }),
+    getStatus: () => api.get('/chatbot/chatbot/status/'),
+}

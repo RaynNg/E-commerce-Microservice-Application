@@ -33,9 +33,17 @@ class OrderSagaOrchestrator:
         total = float(order.total_amount)
 
         # ── Step 2: Reserve Payment ────────────────────────────────────────────
-        payment_result = self._reserve_payment(
-            order, customer_id, payment_method, total
-        )
+        try:
+            payment_result = self._reserve_payment(
+                order, customer_id, payment_method, total
+            )
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).error("RabbitMQ publish failed for order %s: %s", order.id, exc)
+            order.status = "payment_pending_retry"
+            order.save(update_fields=["status"])
+            return order, f"RabbitMQ unavailable, order queued for retry: {exc}"
+
         if not payment_result or not payment_result.get("success"):
             order.status = "failed"
             order.save(update_fields=["status"])
@@ -45,9 +53,17 @@ class OrderSagaOrchestrator:
         payment_id = payment_result.get("payment_id")
 
         # ── Step 3: Reserve Shipping ───────────────────────────────────────────
-        shipping_result = self._reserve_shipping(
-            order, customer_id, shipping_address, shipping_method
-        )
+        try:
+            shipping_result = self._reserve_shipping(
+                order, customer_id, shipping_address, shipping_method
+            )
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).error("RabbitMQ shipping publish failed for order %s: %s", order.id, exc)
+            self._compensate_payment(payment_id)
+            order.status = "payment_pending_retry"
+            order.save(update_fields=["status"])
+            return order, f"RabbitMQ unavailable for shipping, order queued for retry: {exc}"
         if not shipping_result or not shipping_result.get("success"):
             # Compensate: cancel the reserved payment
             self._compensate_payment(payment_id)

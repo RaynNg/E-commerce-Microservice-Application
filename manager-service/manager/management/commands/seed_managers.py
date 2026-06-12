@@ -8,11 +8,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         managers = [
-            {"username": "quanly1", "email": "quanly1@bookstore.com", "first_name": "Nguyễn", "last_name": "Minh Tuấn", "phone": "0911111111", "department": "Quản lý sách"},
-            {"username": "quanly2", "email": "quanly2@bookstore.com", "first_name": "Trần", "last_name": "Hoàng Long", "phone": "0922222222", "department": "Quản lý kho"},
-            {"username": "quanly3", "email": "quanly3@bookstore.com", "first_name": "Lê", "last_name": "Thị Mai", "phone": "0933333333", "department": "Quản lý đơn hàng"},
-            {"username": "quanly4", "email": "quanly4@bookstore.com", "first_name": "Phạm", "last_name": "Văn Nam", "phone": "0944444444", "department": "Quản lý khách hàng"},
-            {"username": "admin", "email": "admin@bookstore.com", "first_name": "Admin", "last_name": "System", "phone": "0900000000", "department": "Hệ thống"},
+            {"username": "quanly1", "email": "quanly1@shopmicro.com", "first_name": "Nguyễn", "last_name": "Minh Tuấn", "phone": "0911111111", "department": "Quản lý sản phẩm"},
+            {"username": "quanly2", "email": "quanly2@shopmicro.com", "first_name": "Trần", "last_name": "Hoàng Long", "phone": "0922222222", "department": "Quản lý kho"},
+            {"username": "quanly3", "email": "quanly3@shopmicro.com", "first_name": "Lê", "last_name": "Thị Mai", "phone": "0933333333", "department": "Quản lý đơn hàng"},
+            {"username": "quanly4", "email": "quanly4@shopmicro.com", "first_name": "Phạm", "last_name": "Văn Nam", "phone": "0944444444", "department": "Quản lý khách hàng"},
+            {"username": "admin", "email": "admin@shopmicro.com", "first_name": "Admin", "last_name": "System", "phone": "0900000000", "department": "Hệ thống"},
         ]
 
         created_count = 0

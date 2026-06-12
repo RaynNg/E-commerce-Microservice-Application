@@ -22,7 +22,7 @@ export default function Header() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/books?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
     }
   };
@@ -39,10 +39,10 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">B</span>
+              <span className="text-white font-bold text-xl">S</span>
             </div>
             <span className="text-xl font-bold text-gray-800 hidden sm:block">
-              BookStore
+              ShopMicro
             </span>
           </Link>
 
@@ -54,7 +54,7 @@ export default function Header() {
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Tìm kiếm sách..."
+                placeholder="Tìm kiếm sản phẩm..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
@@ -70,11 +70,17 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/books"
-              className="text-gray-600 hover:text-primary-600 font-medium"
-            >
-              Sách
+            <Link to="/products" className="text-gray-600 hover:text-primary-600 font-medium">
+              Tất cả
+            </Link>
+            <Link to="/products?type=book" className="text-gray-600 hover:text-primary-600 font-medium">
+              📚 Sách
+            </Link>
+            <Link to="/products?type=laptop" className="text-gray-600 hover:text-primary-600 font-medium">
+              💻 Laptop
+            </Link>
+            <Link to="/products?type=fashion" className="text-gray-600 hover:text-primary-600 font-medium">
+              👕 Thời trang
             </Link>
 
             <Link
@@ -143,7 +149,7 @@ export default function Header() {
           <div className="relative">
             <input
               type="text"
-              placeholder="Tìm kiếm sách..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 outline-none"
@@ -163,11 +169,32 @@ export default function Header() {
         <div className="md:hidden bg-white border-t">
           <nav className="container mx-auto px-4 py-4 space-y-4">
             <Link
-              to="/books"
+              to="/products"
               className="block text-gray-600 hover:text-primary-600 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Sách
+              Tất cả sản phẩm
+            </Link>
+            <Link
+              to="/products?type=book"
+              className="block text-gray-600 hover:text-primary-600 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              📚 Sách
+            </Link>
+            <Link
+              to="/products?type=laptop"
+              className="block text-gray-600 hover:text-primary-600 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              💻 Laptop
+            </Link>
+            <Link
+              to="/products?type=fashion"
+              className="block text-gray-600 hover:text-primary-600 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              👕 Thời trang
             </Link>
             <Link
               to="/cart"

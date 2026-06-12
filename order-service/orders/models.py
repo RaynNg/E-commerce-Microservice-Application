@@ -10,10 +10,11 @@ class Order(models.Model):
         ("shipped", "Shipped"),
         ("delivered", "Delivered"),
         ("cancelled", "Cancelled"),
+        ("payment_pending_retry", "Payment Pending Retry"),
     ]
     customer_id = models.PositiveIntegerField(help_text="FK to customer-service")
     total_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
     payment_method = models.CharField(max_length=50, blank=True, default="")
     shipping_method = models.CharField(max_length=50, blank=True, default="")
     shipping_address = models.TextField(blank=True, default="")

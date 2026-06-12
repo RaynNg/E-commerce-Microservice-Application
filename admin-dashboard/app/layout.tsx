@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bookstore Admin Studio",
-  description: "Data management studio for bookstore microservices",
+  title: "ShopMicro Admin Studio",
+  description: "Data management studio for ShopMicro microservices",
 };
 
 export default function RootLayout({

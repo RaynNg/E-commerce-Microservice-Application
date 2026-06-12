@@ -8,6 +8,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from .services.chatbot_service import handle_chatbot
+
 try:
     import torch
     import torch.nn as nn
@@ -449,7 +451,7 @@ class ChatView(APIView):
 
     def _build_system(self, context: dict) -> str:
         lines = [
-            "Bạn là trợ lý tư vấn sách thông minh của BookStore.",
+            "Bạn là trợ lý tư vấn sách thông minh của ShopMicro.",
             "Hãy tư vấn nhiệt tình, ngắn gọn bằng tiếng Việt.",
             "Khi gợi ý sách, hãy dùng tên sách, không dùng mã sản phẩm.",
             "",
@@ -498,7 +500,7 @@ class ChatView(APIView):
             return [self._resolve(x["product_id"]) for x in context.get(key, [])[:n]]
 
         if any(w in msg for w in ["xin chào", "hello", "hi", "chào", "hey"]):
-            return ("Xin chào! Tôi là trợ lý BookStore AI. "
+            return ("Xin chào! Tôi là trợ lý ShopMicro AI. "
                     "Tôi có thể gợi ý sách, tư vấn mua hàng và giải đáp thắc mắc. "
                     "Bạn cần hỗ trợ gì hôm nay?")
 
@@ -529,6 +531,163 @@ class ChatView(APIView):
             return ("Chúng tôi thường xuyên có chương trình ưu đãi! "
                     "Hãy kiểm tra trang Sách và lọc theo giá để tìm sách phù hợp ngân sách.")
 
-        return ("Cảm ơn bạn đã liên hệ BookStore! "
+        return ("Cảm ơn bạn đã liên hệ ShopMicro! "
                 "Tôi có thể giúp bạn tìm sách, gợi ý sản phẩm hot, hoặc hỗ trợ đơn hàng. "
                 "Bạn muốn hỏi về điều gì?")
+
+
+# ── View 4: RAG Chatbot (POST /api/chatbot/) ──────────────────────────────────
+class ChatbotView(APIView):
+    """
+    RAG chatbot tư vấn sản phẩm (sách/laptop/quần áo).
+
+    POST /api/chatbot/
+    Body: {"message": "laptop gaming dưới 20 triệu", "customer_id": 1}
+    Response: {"reply": "...", "products": [...], "detected_type": "laptop"}
+    """
+
+    def post(self, request):
+        message     = request.data.get("message", "").strip()
+        customer_id = request.data.get("customer_id")
+
+        if not message:
+            return Response({"error": "Vui lòng nhập câu hỏi."}, status=400)
+
+        # Detect product_type để lọc kết quả
+        product_type_filter = None
+        msg_lower = message.lower()
+        if any(w in msg_lower for w in ["sách", "book", "tác giả", "đọc", "xuất bản", "tiểu thuyết"]):
+            product_type_filter = "book"
+        elif any(w in msg_lower for w in ["laptop", "máy tính", "macbook", "gaming pc", "máy xách tay", "cpu", "ram"]):
+            product_type_filter = "laptop"
+        elif any(w in msg_lower for w in ["áo", "quần", "váy", "giày", "thời trang", "mặc", "đi biển", "quần áo", "dép"]):
+            product_type_filter = "fashion"
+
+        try:
+            from .services.rag_service import RAGService
+            rag = RAGService.get_instance()
+
+            retrieved = rag.search(query=message, top_k=5, product_type=product_type_filter)
+            reply = rag.generate_response(
+                user_message=message,
+                retrieved_products=retrieved,
+                customer_id=customer_id,
+            )
+        except Exception as e:
+            print(f"[chatbot] RAG error: {e}")
+            # Fallback to old chatbot_service
+            try:
+                from .services.chatbot_service import handle_chatbot
+                result = handle_chatbot(message, customer_id)
+                return Response(result)
+            except Exception:
+                return Response({"error": str(e)}, status=500)
+
+        products_out = [
+            {
+                "product_id": p["product_id"],
+                "name": p["name"],
+                "price": p["price"],
+                "product_type": p["product_type"],
+            }
+            for p in retrieved
+        ]
+
+        if customer_id:
+            try:
+                from .models import ChatHistory
+                ChatHistory.objects.create(
+                    customer_id=int(customer_id),
+                    message=message,
+                    response=reply,
+                    products_recommended=[p["product_id"] for p in retrieved],
+                )
+            except Exception:
+                pass
+
+        return Response({
+            "reply": reply,
+            "products": products_out,
+            "detected_type": product_type_filter,
+        })
+
+
+# ── View 6: RAG Index Status (GET /api/chatbot/status/) ──────────────────────
+class ProductIndexStatusView(APIView):
+    """GET /api/chatbot/status/ — trạng thái RAG index."""
+
+    def get(self, request):
+        from .models import ProductIndex
+        from .services.rag_service import FAISS_INDEX_PATH
+        return Response({
+            "product_index_count": ProductIndex.objects.count(),
+            "faiss_index_exists": FAISS_INDEX_PATH.exists(),
+            "by_type": {
+                "book":    ProductIndex.objects.filter(product_type="book").count(),
+                "laptop":  ProductIndex.objects.filter(product_type="laptop").count(),
+                "fashion": ProductIndex.objects.filter(product_type="fashion").count(),
+            },
+        })
+
+
+# ── View 5: Behavior Tracking (POST /api/behavior/track/) ────────────────────
+class BehaviorTrackView(APIView):
+    """
+    Track user behavior events (view, click, add_to_cart, purchase).
+    Also updates Neo4j RATED weights for add_to_cart and purchase events.
+
+    POST /api/behavior/track/
+    Body: {"customer_id": 1, "book_id": 5, "action": "view", "metadata": {}}
+    Response: {"status": "tracked", "event_id": 123}
+    """
+
+    ACTION_WEIGHTS = {"view": 1, "click": 1, "add_to_cart": 2, "purchase": 3}
+
+    def post(self, request):
+        customer_id = request.data.get("customer_id")
+        book_id     = request.data.get("book_id")
+        action      = request.data.get("action", "view")
+        metadata    = request.data.get("metadata", {})
+
+        if not customer_id or not book_id:
+            return Response({"error": "customer_id and book_id are required"}, status=400)
+
+        valid_actions = list(self.ACTION_WEIGHTS.keys())
+        if action not in valid_actions:
+            return Response({"error": f"action must be one of {valid_actions}"}, status=400)
+
+        from .models import UserBehavior
+        event = UserBehavior.objects.create(
+            customer_id=int(customer_id),
+            book_id=int(book_id),
+            action=action,
+            metadata=metadata or {},
+        )
+
+        # Update Neo4j weight for significant actions
+        weight = self.ACTION_WEIGHTS.get(action, 1)
+        if action in ("add_to_cart", "purchase"):
+            self._update_neo4j(customer_id, book_id, weight)
+
+        return Response({"status": "tracked", "event_id": event.id})
+
+    def _update_neo4j(self, customer_id, book_id, weight):
+        driver = _get_neo4j()
+        if not driver:
+            return
+        try:
+            with driver.session() as session:
+                session.run(
+                    """
+                    MERGE (c:Customer {id: $cid})
+                    MERGE (b:Book {id: $bid})
+                    MERGE (c)-[r:RATED]->(b)
+                    ON CREATE SET r.rating = $w, r.created_at = toString(datetime())
+                    ON MATCH  SET r.rating = CASE WHEN r.rating < $w THEN $w ELSE r.rating END
+                    """,
+                    cid=str(customer_id),
+                    bid=str(book_id),
+                    w=float(weight),
+                )
+        except Exception as e:
+            print(f"[behavior] Neo4j update failed: {e}")

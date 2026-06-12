@@ -13,12 +13,15 @@ SERVICES = {
     "customers": os.environ.get("CUSTOMER_SERVICE_URL", "http://customer-service:8000"),
     "catalogs": os.environ.get("CATALOG_SERVICE_URL", "http://catalog-service:8000"),
     "books": os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000"),
+    "products": os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000"),
     "carts": os.environ.get("CART_SERVICE_URL", "http://cart-service:8000"),
     "orders": os.environ.get("ORDER_SERVICE_URL", "http://order-service:8000"),
     "shipments": os.environ.get("SHIP_SERVICE_URL", "http://ship-service:8000"),
     "payments": os.environ.get("PAY_SERVICE_URL", "http://pay-service:8000"),
     "comments": os.environ.get("COMMENT_SERVICE_URL", "http://comment-rate-service:8000"),
     "recommendations": os.environ.get("RECOMMENDER_SERVICE_URL", "http://recommender-ai-service:8000"),
+    "chatbot":         os.environ.get("RECOMMENDER_SERVICE_URL", "http://recommender-ai-service:8000"),
+    "behavior":        os.environ.get("RECOMMENDER_SERVICE_URL", "http://recommender-ai-service:8000"),
     "auth": os.environ.get("AUTH_SERVICE_URL", "http://auth-service:8000"),
 }
 

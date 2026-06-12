@@ -1,10 +1,11 @@
 from django.http import JsonResponse
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import BookViewSet
+from .views import ProductViewSet, BookCompatViewSet
 
 router = DefaultRouter()
-router.register(r"books", BookViewSet)
+router.register(r'products', ProductViewSet, basename='product')
+router.register(r'books', BookCompatViewSet, basename='book')  # backward compat
 
 
 def health_check(request):
@@ -18,6 +19,6 @@ def health_check(request):
 
 
 urlpatterns = [
-    path("", include(router.urls)),
-    path("health/", health_check, name="health-check"),
+    path('', include(router.urls)),
+    path('health/', health_check, name='health-check'),
 ]

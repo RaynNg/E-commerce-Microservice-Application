@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-cart_service-secret-key-change-in-prod"
@@ -24,12 +25,15 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "carts.middleware.jwt_auth.JWTAuthMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+JWT_SECRET = os.environ.get("JWT_SECRET", "bookstore-jwt-secret-change-in-production")
 
 ROOT_URLCONF = "cart_service.urls"
 

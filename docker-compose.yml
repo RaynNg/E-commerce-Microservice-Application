@@ -358,11 +358,17 @@ services:
       - DB_NAME=cart_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - JWT_SECRET=bookstore-jwt-secret-change-in-production
     depends_on:
       postgres-cart:
         condition: service_healthy
     volumes:
       - cart-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # ─────────────────── Order Service ───────────────────
   order-service:
@@ -377,6 +383,7 @@ services:
       - DB_NAME=order_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - JWT_SECRET=bookstore-jwt-secret-change-in-production
     depends_on:
       cart-service:
         condition: service_started
@@ -388,6 +395,11 @@ services:
         condition: service_healthy
     volumes:
       - order-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # ─────────────────── Ship Service ───────────────────
   ship-service:
@@ -400,6 +412,7 @@ services:
       - DB_NAME=ship_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - JWT_SECRET=bookstore-jwt-secret-change-in-production
     depends_on:
       postgres-ship:
         condition: service_healthy
@@ -407,6 +420,11 @@ services:
         condition: service_healthy
     volumes:
       - ship-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # ─────────────────── Pay Service ───────────────────
   pay-service:
@@ -415,10 +433,12 @@ services:
       - "8009:8000"
     environment:
       - RABBITMQ_URL=amqp://bookstore:bookstore@rabbitmq:5672/
+      - ORDER_SERVICE_URL=http://order-service:8000
       - DB_HOST=postgres-pay
       - DB_NAME=pay_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - JWT_SECRET=bookstore-jwt-secret-change-in-production
     depends_on:
       postgres-pay:
         condition: service_healthy
@@ -426,6 +446,11 @@ services:
         condition: service_healthy
     volumes:
       - pay-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # ─────────────────── Comment & Rate Service ───────────────────
   comment-rate-service:
@@ -490,8 +515,15 @@ services:
       - ./data_user500.csv:/app/data_user500.csv:ro
     command: >
       sh -c "python manage.py migrate --run-syncdb &&
+             python manage.py sync_product_index &&
              python manage.py build_kb_graph &&
+             python manage.py build_faiss_index &&
              python manage.py runserver 0.0.0.0:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   neo4j-data:

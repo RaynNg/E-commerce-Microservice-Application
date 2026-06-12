@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { orderService } from "../services";
 import { toast } from "react-toastify";
+import { trackBehavior } from "../utils/behaviorTracker";
 import Loading from "../components/Loading";
 import EmptyState from "../components/EmptyState";
 
@@ -80,9 +81,13 @@ export default function CheckoutPage() {
         payment_method: formData.payment_method,
       };
 
+      const cartItems = cart.items || [];
       const response = await orderService.create(orderData);
       await clearCart();
       toast.success("Đặt hàng thành công!");
+      cartItems.forEach((item) => {
+        trackBehavior(customer.id, item.book_id || item.book?.id, "purchase");
+      });
       navigate(`/orders/${response.data.id}`);
     } catch (error) {
       toast.error(error.response?.data?.error || "Không thể đặt hàng");

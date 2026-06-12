@@ -8,16 +8,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         staff_list = [
-            {"username": "nhanvien1", "email": "nhanvien1@bookstore.com", "first_name": "Nguyễn", "last_name": "Văn An", "phone": "0901234567"},
-            {"username": "nhanvien2", "email": "nhanvien2@bookstore.com", "first_name": "Trần", "last_name": "Thị Bình", "phone": "0902345678"},
-            {"username": "nhanvien3", "email": "nhanvien3@bookstore.com", "first_name": "Lê", "last_name": "Văn Cường", "phone": "0903456789"},
-            {"username": "nhanvien4", "email": "nhanvien4@bookstore.com", "first_name": "Phạm", "last_name": "Thị Dung", "phone": "0904567890"},
-            {"username": "nhanvien5", "email": "nhanvien5@bookstore.com", "first_name": "Hoàng", "last_name": "Văn Em", "phone": "0905678901"},
-            {"username": "nhanvien6", "email": "nhanvien6@bookstore.com", "first_name": "Vũ", "last_name": "Thị Phương", "phone": "0906789012"},
-            {"username": "nhanvien7", "email": "nhanvien7@bookstore.com", "first_name": "Đặng", "last_name": "Văn Giang", "phone": "0907890123"},
-            {"username": "nhanvien8", "email": "nhanvien8@bookstore.com", "first_name": "Bùi", "last_name": "Thị Hà", "phone": "0908901234"},
-            {"username": "nhanvien9", "email": "nhanvien9@bookstore.com", "first_name": "Đỗ", "last_name": "Văn Hùng", "phone": "0909012345"},
-            {"username": "nhanvien10", "email": "nhanvien10@bookstore.com", "first_name": "Ngô", "last_name": "Thị Kim", "phone": "0910123456"},
+            {"username": "nhanvien1", "email": "nhanvien1@shopmicro.com", "first_name": "Nguyễn", "last_name": "Văn An", "phone": "0901234567"},
+            {"username": "nhanvien2", "email": "nhanvien2@shopmicro.com", "first_name": "Trần", "last_name": "Thị Bình", "phone": "0902345678"},
+            {"username": "nhanvien3", "email": "nhanvien3@shopmicro.com", "first_name": "Lê", "last_name": "Văn Cường", "phone": "0903456789"},
+            {"username": "nhanvien4", "email": "nhanvien4@shopmicro.com", "first_name": "Phạm", "last_name": "Thị Dung", "phone": "0904567890"},
+            {"username": "nhanvien5", "email": "nhanvien5@shopmicro.com", "first_name": "Hoàng", "last_name": "Văn Em", "phone": "0905678901"},
+            {"username": "nhanvien6", "email": "nhanvien6@shopmicro.com", "first_name": "Vũ", "last_name": "Thị Phương", "phone": "0906789012"},
+            {"username": "nhanvien7", "email": "nhanvien7@shopmicro.com", "first_name": "Đặng", "last_name": "Văn Giang", "phone": "0907890123"},
+            {"username": "nhanvien8", "email": "nhanvien8@shopmicro.com", "first_name": "Bùi", "last_name": "Thị Hà", "phone": "0908901234"},
+            {"username": "nhanvien9", "email": "nhanvien9@shopmicro.com", "first_name": "Đỗ", "last_name": "Văn Hùng", "phone": "0909012345"},
+            {"username": "nhanvien10", "email": "nhanvien10@shopmicro.com", "first_name": "Ngô", "last_name": "Thị Kim", "phone": "0910123456"},
         ]
 
         created_count = 0
