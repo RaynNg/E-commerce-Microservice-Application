@@ -33,7 +33,8 @@ Microservice Response
 | Service Name      | Internal URL                         | Description            |
 | ----------------- | ------------------------------------ | ---------------------- |
 | `catalogs`        | `http://catalog-service:8000`        | Book categories        |
-| `books`           | `http://book-service:8000`           | Book inventory         |
+| `books`           | `http://product-service:8000`        | Product inventory (backward-compat route) |
+| `products`        | `http://product-service:8000`        | Multi-product catalog  |
 | `customers`       | `http://customer-service:8000`       | Customer accounts      |
 | `staff`           | `http://staff-service:8000`          | Staff management       |
 | `managers`        | `http://manager-service:8000`        | Manager/admin accounts |
@@ -142,7 +143,8 @@ SERVICES = {
     "managers": os.environ.get("MANAGER_SERVICE_URL", "http://manager-service:8000"),
     "customers": os.environ.get("CUSTOMER_SERVICE_URL", "http://customer-service:8000"),
     "catalogs": os.environ.get("CATALOG_SERVICE_URL", "http://catalog-service:8000"),
-    "books": os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000"),
+    "books": os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000"),
+    "products": os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000"),
     "carts": os.environ.get("CART_SERVICE_URL", "http://cart-service:8000"),
     "orders": os.environ.get("ORDER_SERVICE_URL", "http://order-service:8000"),
     "shipments": os.environ.get("SHIP_SERVICE_URL", "http://ship-service:8000"),
@@ -160,7 +162,7 @@ You can override service URLs using environment variables in `docker-compose.yml
 api-gateway:
   environment:
     - CATALOG_SERVICE_URL=http://catalog-service:8000
-    - BOOK_SERVICE_URL=http://book-service:8000
+    - PRODUCT_SERVICE_URL=http://product-service:8000
     # etc...
 ```
 
@@ -281,13 +283,13 @@ Always include:
 
 ```bash
 # Check if service is running
-docker-compose ps book-service
+docker-compose ps product-service
 
 # Restart service
-docker-compose restart book-service
+docker-compose restart product-service
 
 # Check logs
-docker-compose logs book-service -f
+docker-compose logs product-service -f
 ```
 
 ### 504 Gateway Timeout
@@ -301,7 +303,7 @@ docker-compose logs book-service -f
 **Timeout is set to 30 seconds.** Check service logs:
 
 ```bash
-docker-compose logs book-service -f
+docker-compose logs product-service -f
 ```
 
 ## 🔍 Debugging
@@ -331,7 +333,8 @@ Response:
 ```json
 {
   "catalogs": "http://catalog-service:8000/api/catalogs/",
-  "books": "http://book-service:8000/api/books/",
+  "books": "http://product-service:8000/api/books/",
+  "products": "http://product-service:8000/api/products/",
   "customers": "http://customer-service:8000/api/customers/",
   ...
 }

@@ -2,7 +2,7 @@
 Chatbot service: RAG-style book advisory using Neo4j + Anthropic Claude.
 
 Pipeline:
-1. Search books by keyword from book-service
+1. Search books by keyword from product-service
 2. Query customer purchase history (Neo4j RATED relationships)
 3. Build context for Claude
 4. Call Claude API (claude-haiku-4-5-20251001)
@@ -13,7 +13,7 @@ import os
 import re
 import requests
 
-BOOK_SERVICE_URL  = os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000")
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000")
 NEO4J_URI         = os.environ.get("NEO4J_URI",        "bolt://neo4j:7687")
 NEO4J_USER        = os.environ.get("NEO4J_USER",       "neo4j")
 NEO4J_PASSWORD    = os.environ.get("NEO4J_PASSWORD",   "bookstore123")
@@ -28,10 +28,10 @@ SYSTEM_PROMPT = (
 
 
 def _search_books(keyword: str) -> list:
-    """Search books from book-service by keyword (title/author search)."""
+    """Search books from product-service by keyword (title/author search)."""
     try:
         r = requests.get(
-            f"{BOOK_SERVICE_URL}/api/books/",
+            f"{PRODUCT_SERVICE_URL}/api/books/",
             params={"search": keyword, "limit": 10},
             timeout=10,
         )
@@ -43,7 +43,7 @@ def _search_books(keyword: str) -> list:
 
     # Fallback: fetch all and filter
     try:
-        r = requests.get(f"{BOOK_SERVICE_URL}/api/books/", params={"limit": 100}, timeout=10)
+        r = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/", params={"limit": 100}, timeout=10)
         if r.status_code == 200:
             data = r.json()
             books = data.get("results", data) if isinstance(data, dict) else data

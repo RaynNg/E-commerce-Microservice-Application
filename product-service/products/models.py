@@ -4,8 +4,8 @@ from django.db import models
 class Product(models.Model):
     PRODUCT_TYPES = [
         ('book', 'Sách'),
-        ('laptop', 'Laptop'),
-        ('fashion', 'Quần áo'),
+        ('electronics', 'Đồ điện tử'),
+        ('fashion', 'Thời trang'),
     ]
     catalog_id = models.IntegerField()
     product_type = models.CharField(max_length=20, choices=PRODUCT_TYPES, default='book')
@@ -40,21 +40,22 @@ class Book(models.Model):
         db_table = 'book_detail'
 
 
-class Laptop(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='laptop_detail')
+class Electronics(models.Model):
+    SUBCATEGORIES = [
+        ('laptop', 'Laptop'),
+        ('phone', 'Điện thoại'),
+        ('headphone', 'Tai nghe'),
+        ('accessory', 'Phụ kiện'),
+    ]
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='electronics_detail')
     brand = models.CharField(max_length=100)
-    cpu = models.CharField(max_length=200)
-    ram = models.CharField(max_length=50)
-    storage = models.CharField(max_length=100)
-    display = models.CharField(max_length=100)
-    gpu = models.CharField(max_length=200, blank=True)
-    battery = models.CharField(max_length=100, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    os = models.CharField(max_length=100, default='Windows 11')
+    subcategory = models.CharField(max_length=20, choices=SUBCATEGORIES, default='laptop')
+    # Common specs stored flexibly; keys vary by subcategory
+    specs = models.JSONField(default=dict, blank=True)
     warranty_months = models.IntegerField(default=12)
 
     class Meta:
-        db_table = 'laptop_detail'
+        db_table = 'electronics_detail'
 
 
 class Fashion(models.Model):

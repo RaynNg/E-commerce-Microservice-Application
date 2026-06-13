@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Product, Book, Laptop, Fashion
+from .models import Product, Book, Electronics, Fashion
 from .serializers import ProductSerializer, BookCompatSerializer
 
 STAFF_SERVICE_URL = os.environ.get("STAFF_SERVICE_URL", "http://staff-service:8000")
@@ -15,7 +15,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = Product.objects.select_related(
-            'book_detail', 'laptop_detail', 'fashion_detail'
+            'book_detail', 'electronics_detail', 'fashion_detail'
         ).filter(is_active=True)
 
         product_type = self.request.query_params.get('product_type')
@@ -50,7 +50,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         qs = Product.objects.filter(
             Q(name__icontains=q) | Q(description__icontains=q),
             is_active=True
-        ).select_related('book_detail', 'laptop_detail', 'fashion_detail')
+        ).select_related('book_detail', 'electronics_detail', 'fashion_detail')
         return Response(ProductSerializer(qs, many=True).data)
 
     @action(detail=True, methods=['post'])

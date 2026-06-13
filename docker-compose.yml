@@ -87,14 +87,14 @@ services:
       timeout: 5s
       retries: 5
 
-  postgres-book:
+  postgres-product:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=book_db
+      - POSTGRES_DB=product_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - postgres-book-data:/var/lib/postgresql/data
+      - postgres-product-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -239,7 +239,7 @@ services:
       - MANAGER_SERVICE_URL=http://manager-service:8000
       - CUSTOMER_SERVICE_URL=http://customer-service:8000
       - CATALOG_SERVICE_URL=http://catalog-service:8000
-      - BOOK_SERVICE_URL=http://book-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
       - CART_SERVICE_URL=http://cart-service:8000
       - ORDER_SERVICE_URL=http://order-service:8000
       - SHIP_SERVICE_URL=http://ship-service:8000
@@ -254,7 +254,7 @@ services:
       - manager-service
       - customer-service
       - catalog-service
-      - book-service
+      - product-service
       - cart-service
       - order-service
       - ship-service
@@ -329,23 +329,23 @@ services:
     volumes:
       - catalog-data:/app/data
 
-  # ─────────────────── Book Service ───────────────────
-  book-service:
-    build: ./book-service
+  # ─────────────────── Product Service ───────────────────
+  product-service:
+    build: ./product-service
     ports:
       - "8005:8000"
     environment:
       - STAFF_SERVICE_URL=http://staff-service:8000
       - CATALOG_SERVICE_URL=http://catalog-service:8000
-      - DB_HOST=postgres-book
-      - DB_NAME=book_db
+      - DB_HOST=postgres-product
+      - DB_NAME=product_db
       - DB_USER=postgres
       - DB_PASSWORD=postgres
     depends_on:
-      postgres-book:
+      postgres-product:
         condition: service_healthy
     volumes:
-      - book-data:/app/data
+      - product-data:/app/data
 
   # ─────────────────── Cart Service ───────────────────
   cart-service:
@@ -353,7 +353,7 @@ services:
     ports:
       - "8006:8000"
     environment:
-      - BOOK_SERVICE_URL=http://book-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
       - DB_HOST=postgres-cart
       - DB_NAME=cart_db
       - DB_USER=postgres
@@ -377,7 +377,7 @@ services:
       - "8007:8000"
     environment:
       - CART_SERVICE_URL=http://cart-service:8000
-      - BOOK_SERVICE_URL=http://book-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
       - RABBITMQ_URL=amqp://bookstore:bookstore@rabbitmq:5672/
       - DB_HOST=postgres-order
       - DB_NAME=order_db
@@ -387,7 +387,7 @@ services:
     depends_on:
       cart-service:
         condition: service_started
-      book-service:
+      product-service:
         condition: service_started
       rabbitmq:
         condition: service_healthy
@@ -492,7 +492,7 @@ services:
       - "8011:8000"
     environment:
       - COMMENT_SERVICE_URL=http://comment-rate-service:8000
-      - BOOK_SERVICE_URL=http://book-service:8000
+      - PRODUCT_SERVICE_URL=http://product-service:8000
       - DB_HOST=postgres-recommender
       - DB_NAME=recommender_db
       - DB_USER=postgres
@@ -504,7 +504,7 @@ services:
     depends_on:
       comment-rate-service:
         condition: service_started
-      book-service:
+      product-service:
         condition: service_started
       postgres-recommender:
         condition: service_healthy
@@ -533,7 +533,7 @@ volumes:
   postgres-manager-data:
   postgres-customer-data:
   postgres-catalog-data:
-  postgres-book-data:
+  postgres-product-data:
   postgres-cart-data:
   postgres-order-data:
   postgres-ship-data:
@@ -545,7 +545,7 @@ volumes:
   manager-data:
   customer-data:
   catalog-data:
-  book-data:
+  product-data:
   cart-data:
   order-data:
   ship-data:

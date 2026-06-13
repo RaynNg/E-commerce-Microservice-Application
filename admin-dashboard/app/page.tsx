@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -8,9 +11,25 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { services } from "@/lib/api";
-import { Database, Server } from "lucide-react";
+import { isStaffAuthenticated, getStaffSession, logoutStaff } from "@/lib/staff-auth";
+import { Database, Server, LogIn, LogOut, Package } from "lucide-react";
 
 export default function Home() {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const session = getStaffSession();
+    setAuthenticated(!!session);
+    setUsername(session?.username ?? null);
+  }, []);
+
+  const handleLogout = () => {
+    logoutStaff();
+    setAuthenticated(false);
+    setUsername(null);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -23,13 +42,39 @@ export default function Home() {
         <p className="text-muted-foreground text-lg">
           Quản lý và xem dữ liệu của các microservices trong hệ thống
         </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button asChild>
-            <Link href="/login">Đăng nhập staff</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/service/book">Quản lý sách</Link>
-          </Button>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {authenticated ? (
+            <>
+              <div className="rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1.5 text-sm text-green-700">
+                Đã đăng nhập: <strong>{username}</strong>
+              </div>
+              <Button asChild>
+                <Link href="/service/product">
+                  <Package className="mr-2 h-4 w-4" />
+                  Quản lý sản phẩm
+                </Link>
+              </Button>
+              <Button variant="outline" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Đăng xuất
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild>
+                <Link href="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Đăng nhập staff
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/service/product">
+                  <Package className="mr-2 h-4 w-4" />
+                  Quản lý sản phẩm
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

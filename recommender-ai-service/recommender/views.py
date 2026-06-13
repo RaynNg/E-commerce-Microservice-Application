@@ -39,7 +39,7 @@ ACTION_MAP      = {"view": 0, "click": 1, "add_to_cart": 2}
 IDX_TO_ACTION   = {0: "view", 1: "click", 2: "add_to_cart"}
 
 COMMENT_SERVICE_URL = os.environ.get("COMMENT_SERVICE_URL", "http://comment-rate-service:8000")
-BOOK_SERVICE_URL    = os.environ.get("BOOK_SERVICE_URL",    "http://book-service:8000")
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000")
 NEO4J_URI           = os.environ.get("NEO4J_URI",           "bolt://neo4j:7687")
 NEO4J_USER          = os.environ.get("NEO4J_USER",          "neo4j")
 NEO4J_PASSWORD      = os.environ.get("NEO4J_PASSWORD",      "bookstore123")
@@ -165,7 +165,7 @@ def _get_pid_title_map() -> dict:
 
     try:
         r = requests.get(
-            f"{BOOK_SERVICE_URL}/api/books/",
+            f"{PRODUCT_SERVICE_URL}/api/books/",
             params={"limit": 500},
             timeout=10,
         )
@@ -258,7 +258,7 @@ class RecommendView(APIView):
 
         for rec in recs:
             try:
-                r = requests.get(f"{BOOK_SERVICE_URL}/api/books/{rec['book_id']}/", timeout=5)
+                r = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/{rec['book_id']}/", timeout=5)
                 if r.status_code == 200:
                     rec["book"] = r.json()
             except requests.RequestException:
@@ -276,7 +276,7 @@ class RecommendView(APIView):
         )[:top_n]
         for rec in popular:
             try:
-                r = requests.get(f"{BOOK_SERVICE_URL}/api/books/{rec['book_id']}/", timeout=5)
+                r = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/{rec['book_id']}/", timeout=5)
                 if r.status_code == 200:
                     rec["book"] = r.json()
             except requests.RequestException:
@@ -321,9 +321,9 @@ class ModelRecommendView(APIView):
                               for i, p in enumerate(probs_t)}
                 recent_seq = user_df[["product_id", "action"]].to_dict("records")
 
-        # ── Fetch real books from book-service ────────────────────────────
+        # ── Fetch real books from product-service ────────────────────────────
         try:
-            resp      = requests.get(f"{BOOK_SERVICE_URL}/api/books/", timeout=10,
+            resp      = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/", timeout=10,
                                      params={"limit": 50})
             data      = resp.json()
             all_books = data.get("results", data) if isinstance(data, dict) else data

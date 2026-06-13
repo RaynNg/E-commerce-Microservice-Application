@@ -6,9 +6,13 @@ import Link from "next/link";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { services, fetchServiceData } from "@/lib/api";
+import { isStaffAuthenticated } from "@/lib/staff-auth";
 import { ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookManager } from "@/components/book-manager";
+import { ProductManager } from "@/components/product-manager";
+import { OrderManager } from "@/components/order-manager";
+import { PaymentManager } from "@/components/payment-manager";
+import { ShippingManager } from "@/components/shipping-manager";
 
 export default function ServicePage() {
   const params = useParams();
@@ -20,6 +24,14 @@ export default function ServicePage() {
   const [error, setError] = useState<string | null>(null);
 
   const service = services.find((s) => s.id === serviceId);
+
+  // Auth guard for managed services
+  const MANAGED = ["product", "order", "payment", "shipping"];
+  useEffect(() => {
+    if (MANAGED.includes(serviceId) && !isStaffAuthenticated()) {
+      router.replace("/login");
+    }
+  }, [serviceId]);
 
   const loadData = async () => {
     if (!service) return;
@@ -82,8 +94,14 @@ export default function ServicePage() {
         </div>
       </div>
 
-      {service.id === "book" ? (
-        <BookManager />
+      {service.id === "product" ? (
+        <ProductManager />
+      ) : service.id === "order" ? (
+        <OrderManager />
+      ) : service.id === "payment" ? (
+        <PaymentManager />
+      ) : service.id === "shipping" ? (
+        <ShippingManager />
       ) : loading ? (
         <Card>
           <CardContent className="py-12 text-center">

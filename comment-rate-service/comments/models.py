@@ -3,7 +3,7 @@ from django.db import models
 
 class CommentRate(models.Model):
     customer_id = models.PositiveIntegerField(help_text="FK to customer-service")
-    book_id = models.PositiveIntegerField(help_text="FK to book-service")
+    book_id = models.PositiveIntegerField(help_text="FK to product-service")
     rating = models.PositiveIntegerField(
         help_text="Rating from 1 to 5",
     )

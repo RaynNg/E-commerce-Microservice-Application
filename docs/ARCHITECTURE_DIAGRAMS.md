@@ -15,7 +15,7 @@ graph LR
     G --> MANAGER[manager-service :8002]
     G --> CUSTOMER[customer-service :8003]
     G --> CATALOG[catalog-service :8004]
-    G --> BOOK[book-service :8005]
+    G --> PRODUCT[product-service :8005]
     G --> CART[cart-service :8006]
     G --> ORDER[order-service :8007]
     G --> SHIP[ship-service :8008]
@@ -28,7 +28,7 @@ graph LR
     MANAGER --> MANAGERDB[(PostgreSQL - manager_db)]
     CUSTOMER --> CUSTOMERDB[(PostgreSQL - customer_db)]
     CATALOG --> CATALOGDB[(PostgreSQL - catalog_db)]
-    BOOK --> BOOKDB[(PostgreSQL - book_db)]
+    PRODUCT --> PRODUCTDB[(PostgreSQL - product_db)]
     CART --> CARTDB[(PostgreSQL - cart_db)]
     ORDER --> ORDERDB[(PostgreSQL - order_db)]
     SHIP --> SHIPDB[(PostgreSQL - ship_db)]
@@ -40,12 +40,12 @@ graph LR
     ORDER --> SHIP
     ORDER --> CART
     ORDER --> CUSTOMER
-    ORDER --> BOOK
-    CART --> BOOK
+    ORDER --> PRODUCT
+    CART --> PRODUCT
     CART --> CUSTOMER
     COMMENT --> CUSTOMER
-    COMMENT --> BOOK
-    AI --> BOOK
+    COMMENT --> PRODUCT
+    AI --> PRODUCT
     AI --> COMMENT
 ```
 
@@ -61,7 +61,7 @@ graph TB
     G --> MANAGER[manager-service]
     G --> CUSTOMER[customer-service]
     G --> CATALOG[catalog-service]
-    G --> BOOK[book-service]
+    G --> PRODUCT[product-service]
     G --> CART[cart-service]
     G --> ORDER[order-service]
     G --> SHIP[ship-service]
@@ -102,7 +102,7 @@ graph LR
     MANAGER --> MANAGERDB[(PostgreSQL manager_db)]
     MANAGER --> STAFF[staff-service]
     MANAGER --> CATALOG[catalog-service]
-    MANAGER --> BOOK[book-service]
+    MANAGER --> PRODUCT[product-service]
 ```
 
 ## 6) customer-service
@@ -123,21 +123,21 @@ graph LR
 graph LR
     G[API Gateway] --> CATALOG[catalog-service]
     CATALOG --> CATALOGDB[(PostgreSQL catalog_db)]
-    BOOK[book-service] --> CATALOG
+    PRODUCT[product-service] --> CATALOG
     MANAGER[manager-service] --> CATALOG
 ```
 
-## 8) book-service
+## 8) product-service
 
 ```mermaid
 graph LR
-    G[API Gateway] --> BOOK[book-service]
-    BOOK --> BOOKDB[(PostgreSQL book_db)]
-    BOOK --> CATALOG[catalog-service]
-    CART[cart-service] --> BOOK
-    ORDER[order-service] --> BOOK
-    COMMENT[comment-rate-service] --> BOOK
-    AI[recommender-ai-service] --> BOOK
+    G[API Gateway] --> PRODUCT[product-service]
+    PRODUCT --> PRODUCTDB[(PostgreSQL product_db)]
+    PRODUCT --> CATALOG[catalog-service]
+    CART[cart-service] --> PRODUCT
+    ORDER[order-service] --> PRODUCT
+    COMMENT[comment-rate-service] --> PRODUCT
+    AI[recommender-ai-service] --> PRODUCT
 ```
 
 ## 9) cart-service
@@ -147,7 +147,7 @@ graph LR
     G[API Gateway] --> CART[cart-service]
     CART --> CARTDB[(PostgreSQL cart_db)]
     CART --> CUSTOMER[customer-service]
-    CART --> BOOK[book-service]
+    CART --> PRODUCT[product-service]
     ORDER[order-service] --> CART
 ```
 
@@ -160,7 +160,7 @@ graph LR
 
     ORDER --> CUSTOMER[customer-service]
     ORDER --> CART[cart-service]
-    ORDER --> BOOK[book-service]
+    ORDER --> PRODUCT[product-service]
     ORDER --> PAY[pay-service]
     ORDER --> SHIP[ship-service]
 ```
@@ -192,7 +192,7 @@ graph LR
     G[API Gateway] --> COMMENT[comment-rate-service]
     COMMENT --> COMMENTDB[(PostgreSQL comment_db)]
     COMMENT --> CUSTOMER[customer-service]
-    COMMENT --> BOOK[book-service]
+    COMMENT --> PRODUCT[product-service]
     AI[recommender-ai-service] --> COMMENT
 ```
 
@@ -202,7 +202,7 @@ graph LR
 graph LR
     G[API Gateway] --> AI[recommender-ai-service]
     AI --> AIDB[(PostgreSQL recommender_db)]
-    AI --> BOOK[book-service]
+    AI --> PRODUCT[product-service]
     AI --> COMMENT[comment-rate-service]
     AI --> CUSTOMER[customer-service]
 ```

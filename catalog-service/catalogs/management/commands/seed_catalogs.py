@@ -12,13 +12,15 @@ BOOK_CATEGORIES = [
     {"name": "Lịch sử & Địa lý", "description": "Lịch sử Việt Nam và thế giới", "icon": "🗺️"},
 ]
 
-LAPTOP_CATEGORIES = [
+ELECTRONICS_CATEGORIES = [
     {"name": "Laptop Gaming", "description": "RTX series, hiệu năng cao cho game", "icon": "🎮"},
     {"name": "Laptop Văn phòng", "description": "Mỏng nhẹ, pin trâu, office work", "icon": "💼"},
     {"name": "Laptop Đồ họa", "description": "Màn hình màu chuẩn, GPU mạnh", "icon": "🎨"},
     {"name": "Laptop Sinh viên", "description": "Giá tốt, đủ dùng cho học tập", "icon": "🎓"},
     {"name": "MacBook", "description": "Apple MacBook Air và MacBook Pro", "icon": "🍎"},
-    {"name": "Phụ kiện Laptop", "description": "Chuột, bàn phím, túi, đế tản nhiệt", "icon": "🖱️"},
+    {"name": "Điện thoại", "description": "Smartphone Android và iPhone", "icon": "📱"},
+    {"name": "Tai nghe Bluetooth", "description": "TWS, over-ear, in-ear, gaming headset", "icon": "🎧"},
+    {"name": "Phụ kiện điện tử", "description": "Chuột, bàn phím, màn hình, sạc, cáp", "icon": "🖱️"},
 ]
 
 FASHION_CATEGORIES = [
@@ -33,14 +35,14 @@ FASHION_CATEGORIES = [
 
 
 class Command(BaseCommand):
-    help = 'Seed catalog data for all product types (book, laptop, fashion)'
+    help = 'Seed catalog data for all product types (book, electronics, fashion)'
 
     def handle(self, *args, **options):
         created_count = 0
 
         for product_type, categories in [
             ('book', BOOK_CATEGORIES),
-            ('laptop', LAPTOP_CATEGORIES),
+            ('electronics', ELECTRONICS_CATEGORIES),
             ('fashion', FASHION_CATEGORIES),
         ]:
             for cat_data in categories:

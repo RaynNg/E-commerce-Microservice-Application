@@ -8,7 +8,7 @@ Vietnamese titles are mapped to their original-language search query for better 
 import time
 import requests
 from django.core.management.base import BaseCommand
-from books.models import Book
+from products.models import Book
 
 GOOGLE_BOOKS_API  = "https://www.googleapis.com/books/v1/volumes"
 OPEN_LIBRARY_SEARCH = "https://openlibrary.org/search.json"

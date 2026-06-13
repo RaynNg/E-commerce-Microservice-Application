@@ -37,9 +37,9 @@ echo.
 echo === Phase 2: Seeding dependent data ===
 
 echo.
-echo ^>^>^> Seeding book-service...
-docker-compose exec -T book-service python manage.py seed_books
-echo ^>^>^> book-service seeded successfully!
+echo ^>^>^> Seeding product-service...
+docker-compose exec -T product-service python manage.py seed_products
+echo ^>^>^> product-service seeded successfully!
 
 echo.
 echo ^>^>^> Seeding cart-service...

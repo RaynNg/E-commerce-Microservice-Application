@@ -8,8 +8,8 @@ import { trackBehavior } from "../utils/behaviorTracker";
 import Loading from "../components/Loading";
 import { toast } from "react-toastify";
 
-const TYPE_EMOJI = { book: "📚", laptop: "💻", fashion: "👕" };
-const TYPE_LABEL = { book: "Sách", laptop: "Laptop", fashion: "Thời trang" };
+const TYPE_EMOJI = { book: "📚", electronics: "🖥️", fashion: "👕" };
+const TYPE_LABEL = { book: "Sách", electronics: "Đồ điện tử", fashion: "Thời trang" };
 
 function BookMeta({ detail }) {
   if (!detail) return null;
@@ -24,19 +24,32 @@ function BookMeta({ detail }) {
   return <MetaTable rows={rows} />;
 }
 
-function LaptopMeta({ detail }) {
+function ElectronicsMeta({ detail }) {
   if (!detail) return null;
+  const specs = detail.specs || {};
   const rows = [
     ["Hãng", detail.brand],
-    ["CPU", detail.cpu],
-    ["RAM", detail.ram],
-    ["Bộ nhớ", detail.storage],
-    ["Màn hình", detail.display],
-    ["GPU", detail.gpu],
-    ["Pin", detail.battery],
-    ["Khối lượng", detail.weight ? `${detail.weight} kg` : null],
-    ["Hệ điều hành", detail.os],
+    ["Loại", detail.subcategory === "laptop" ? "Laptop" : detail.subcategory === "phone" ? "Điện thoại" : detail.subcategory === "headphone" ? "Tai nghe" : detail.subcategory],
     ["Bảo hành", detail.warranty_months ? `${detail.warranty_months} tháng` : null],
+    // Laptop specs
+    ...(specs.cpu ? [["CPU", specs.cpu]] : []),
+    ...(specs.ram ? [["RAM", specs.ram]] : []),
+    ...(specs.storage ? [["Bộ nhớ", specs.storage]] : []),
+    ...(specs.display ? [["Màn hình", specs.display]] : []),
+    ...(specs.gpu ? [["GPU", specs.gpu]] : []),
+    ...(specs.battery ? [["Pin", specs.battery]] : []),
+    ...(specs.weight_kg ? [["Khối lượng", `${specs.weight_kg} kg`]] : []),
+    ...(specs.os ? [["Hệ điều hành", specs.os]] : []),
+    // Phone specs
+    ...(specs.screen ? [["Màn hình", specs.screen]] : []),
+    ...(specs.camera_main ? [["Camera sau", specs.camera_main]] : []),
+    ...(specs.camera_front ? [["Camera trước", specs.camera_front]] : []),
+    ...(specs.sim ? [["SIM", specs.sim]] : []),
+    // Headphone specs
+    ...(specs.connectivity ? [["Kết nối", specs.connectivity]] : []),
+    ...(specs.battery_life_h ? [["Pin tai nghe", `${specs.battery_life_h}h`]] : []),
+    ...(specs.anc !== undefined ? [["Chống ồn ANC", specs.anc ? "Có" : "Không"]] : []),
+    ...(specs.type ? [["Kiểu dáng", specs.type]] : []),
   ].filter(([, v]) => v);
   return <MetaTable rows={rows} />;
 }
@@ -227,7 +240,7 @@ export default function ProductDetailPage() {
 
             {/* Type-specific meta */}
             {product.product_type === "book" && <BookMeta detail={product.detail} />}
-            {product.product_type === "laptop" && <LaptopMeta detail={product.detail} />}
+            {product.product_type === "electronics" && <ElectronicsMeta detail={product.detail} />}
             {product.product_type === "fashion" && <FashionMeta detail={product.detail} />}
           </div>
         </div>

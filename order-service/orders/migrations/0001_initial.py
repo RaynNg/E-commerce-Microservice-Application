@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "book_id",
-                    models.PositiveIntegerField(help_text="FK to book-service"),
+                    models.PositiveIntegerField(help_text="FK to product-service"),
                 ),
                 ("quantity", models.PositiveIntegerField(default=1)),
                 ("price", models.DecimalField(decimal_places=2, max_digits=10)),

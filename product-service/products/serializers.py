@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Book, Laptop, Fashion
+from .models import Product, Book, Electronics, Fashion
 
 
 class BookDetailSerializer(serializers.ModelSerializer):
@@ -8,9 +8,9 @@ class BookDetailSerializer(serializers.ModelSerializer):
         exclude = ['id', 'product']
 
 
-class LaptopDetailSerializer(serializers.ModelSerializer):
+class ElectronicsDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Laptop
+        model = Electronics
         exclude = ['id', 'product']
 
 
@@ -34,8 +34,8 @@ class ProductSerializer(serializers.ModelSerializer):
     def get_detail(self, obj):
         if obj.product_type == 'book' and hasattr(obj, 'book_detail'):
             return BookDetailSerializer(obj.book_detail).data
-        elif obj.product_type == 'laptop' and hasattr(obj, 'laptop_detail'):
-            return LaptopDetailSerializer(obj.laptop_detail).data
+        elif obj.product_type == 'electronics' and hasattr(obj, 'electronics_detail'):
+            return ElectronicsDetailSerializer(obj.electronics_detail).data
         elif obj.product_type == 'fashion' and hasattr(obj, 'fashion_detail'):
             return FashionDetailSerializer(obj.fashion_detail).data
         return {}

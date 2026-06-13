@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { chatbotService } from "../services";
 
-const TYPE_EMOJI = { book: "📚", laptop: "💻", fashion: "👕" };
+const TYPE_EMOJI = { book: "📚", electronics: "🖥️", fashion: "👕" };
 
 const SUGGESTED = [
   "Laptop gaming dưới 20 triệu",
@@ -40,7 +40,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Xin chào! Tôi là trợ lý ShopMicro 🛍️\nBạn cần tư vấn sách 📚, laptop 💻 hay quần áo 👕?",
+      content: "Xin chào! Tôi là trợ lý ShopMicro 🛍️\nBạn cần tư vấn sách 📚, điện tử 🖥️ hay thời trang 👕?",
       products: [],
       time: new Date(),
     },

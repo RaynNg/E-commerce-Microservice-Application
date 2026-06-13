@@ -4,7 +4,7 @@ from django.db import models
 class Catalog(models.Model):
     PRODUCT_TYPES = [
         ('book', 'Sách'),
-        ('laptop', 'Laptop & Thiết bị điện tử'),
+        ('electronics', 'Đồ điện tử'),
         ('fashion', 'Thời trang'),
     ]
     name = models.CharField(max_length=255)

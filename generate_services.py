@@ -27,9 +27,9 @@ SERVICES = {
         "app": "catalogs",
         "port": 8004,
     },
-    "book-service": {
-        "project": "book_service",
-        "app": "books",
+    "product-service": {
+        "project": "product_service",
+        "app": "products",
         "port": 8005,
     },
     "cart-service": {

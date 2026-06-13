@@ -177,7 +177,7 @@ export function BookManager() {
             <div>
               <CardTitle>Quản lý sách cho staff</CardTitle>
               <CardDescription>
-                Tạo, sửa, xóa và cập nhật dữ liệu sách từ book-service.
+                Tạo, sửa, xóa và cập nhật dữ liệu sách từ product-service.
               </CardDescription>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -229,7 +229,7 @@ export function BookManager() {
             <CardTitle>{editingBookId ? "Sửa sách" : "Thêm sách mới"}</CardTitle>
             <CardDescription>
               {staffAuthenticated
-                ? "Nhập thông tin sách để lưu vào book-service."
+                ? "Nhập thông tin sách để lưu vào product-service."
                 : "Bạn cần đăng nhập staff để thực hiện tạo hoặc cập nhật sách."}
             </CardDescription>
           </CardHeader>
@@ -358,7 +358,7 @@ export function BookManager() {
               <div>
                 <CardTitle>Danh sách sách</CardTitle>
                 <CardDescription>
-                  Quản lý trực tiếp dữ liệu sách trong book-service.
+                  Quản lý trực tiếp dữ liệu sách trong product-service.
                 </CardDescription>
               </div>
               <div className="relative w-full lg:max-w-xs">

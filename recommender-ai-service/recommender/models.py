@@ -2,7 +2,7 @@ from django.db import models
 
 
 class ProductIndex(models.Model):
-    """Index sản phẩm cho RAG — sync từ book-service."""
+    """Index sản phẩm cho RAG — sync từ product-service."""
     product_id = models.IntegerField(unique=True)
     product_type = models.CharField(max_length=20)
     name = models.CharField(max_length=500)

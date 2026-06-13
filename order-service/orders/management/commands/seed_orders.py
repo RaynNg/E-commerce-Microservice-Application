@@ -23,7 +23,7 @@ class Command(BaseCommand):
             "Nam Kỳ Khởi Nghĩa", "Điện Biên Phủ", "Võ Văn Tần", "Nguyễn Thị Minh Khai"
         ]
 
-        # Sample book prices (simulate fetching from book-service)
+        # Sample book prices (simulate fetching from product-service)
         book_prices = {i: Decimal(random.randint(30, 500) * 1000) for i in range(1, 101)}
 
         created_order_count = 0

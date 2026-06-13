@@ -10,11 +10,11 @@ def health_check(request):
         db_status = "ok"
     except Exception:
         db_status = "error"
-    return JsonResponse({"status": "ok", "service": "book-service", "db": db_status})
+    return JsonResponse({"status": "ok", "service": "product-service", "db": db_status})
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", health_check, name="health-check"),
-    path("api/", include("books.urls")),
+    path("api/", include("products.urls")),
 ]

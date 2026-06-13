@@ -12,7 +12,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
-    book_id = models.PositiveIntegerField(help_text="FK to book-service")
+    book_id = models.PositiveIntegerField(help_text="FK to product-service")
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 

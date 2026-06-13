@@ -11,7 +11,7 @@ flowchart LR
     G --> S2[manager-service :8002]
     G --> S3[customer-service :8003]
     G --> S4[catalog-service :8004]
-    G --> S5[book-service :8005]
+    G --> S5[product-service :8005]
     G --> S6[cart-service :8006]
     G --> S7[order-service :8007]
     G --> S8[ship-service :8008]
@@ -23,7 +23,7 @@ flowchart LR
     S2 --> DB2[(postgres-manager)]
     S3 --> DB3[(postgres-customer)]
     S4 --> DB4[(postgres-catalog)]
-    S5 --> DB5[(postgres-book)]
+    S5 --> DB5[(postgres-product)]
     S6 --> DB6[(postgres-cart)]
     S7 --> DB7[(postgres-order)]
     S8 --> DB8[(postgres-ship)]
@@ -71,7 +71,7 @@ Examples:
 | `managers`        | `http://manager-service:8000`        |
 | `customers`       | `http://customer-service:8000`       |
 | `catalogs`        | `http://catalog-service:8000`        |
-| `books`           | `http://book-service:8000`           |
+| `books`           | `http://product-service:8000`           |
 | `carts`           | `http://cart-service:8000`           |
 | `orders`          | `http://order-service:8000`          |
 | `shipments`       | `http://ship-service:8000`           |
@@ -324,14 +324,14 @@ Services communicate synchronously over HTTP (using the `requests` library).
 Important flows:
 
 - customer-service registers a user -> calls cart-service to create a default cart.
-- order-service creates an order from cart -> calls book-service (price/stock), pay-service (payment), ship-service (shipment), cart-service (clear cart).
-- recommender-ai-service -> fetches ratings from comment-rate-service and book data from book-service.
+- order-service creates an order from cart -> calls product-service (price/stock), pay-service (payment), ship-service (shipment), cart-service (clear cart).
+- recommender-ai-service -> fetches ratings from comment-rate-service and book data from product-service.
 
 ## 4) Data and Persistence
 
 The project currently uses **database-per-service** on the same Docker Compose cluster:
 
-- `postgres-staff`, `postgres-manager`, `postgres-customer`, `postgres-catalog`, `postgres-book`, `postgres-cart`, `postgres-order`, `postgres-ship`, `postgres-pay`, `postgres-comment`, `postgres-recommender`.
+- `postgres-staff`, `postgres-manager`, `postgres-customer`, `postgres-catalog`, `postgres-product`, `postgres-cart`, `postgres-order`, `postgres-ship`, `postgres-pay`, `postgres-comment`, `postgres-recommender`.
 
 Benefits:
 
@@ -350,7 +350,7 @@ Benefits:
 | manager-service        |      8002 |           8000 |
 | customer-service       |      8003 |           8000 |
 | catalog-service        |      8004 |           8000 |
-| book-service           |      8005 |           8000 |
+| product-service           |      8005 |           8000 |
 | cart-service           |      8006 |           8000 |
 | order-service          |      8007 |           8000 |
 | ship-service           |      8008 |           8000 |

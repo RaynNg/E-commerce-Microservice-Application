@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer, AddToCartSerializer, UpdateCartItemSerializer
 
-BOOK_SERVICE_URL = os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000")
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000")
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -27,7 +27,7 @@ class CartViewSet(viewsets.ModelViewSet):
         cart_data = CartSerializer(cart).data
         for item in cart_data["items"]:
             try:
-                resp = requests.get(f"{BOOK_SERVICE_URL}/api/books/{item['book_id']}/", timeout=5)
+                resp = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/{item['book_id']}/", timeout=5)
                 if resp.status_code == 200:
                     item["book"] = resp.json()
             except requests.RequestException:

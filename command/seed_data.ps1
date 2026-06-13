@@ -31,7 +31,7 @@ Seed-Service -ServiceName "customer-service" -Command "seed_customers"
 
 Write-Host "`n=== Phase 2: Seeding dependent data ===" -ForegroundColor Magenta
 
-Seed-Service -ServiceName "book-service" -Command "seed_books"
+Seed-Service -ServiceName "product-service" -Command "seed_products"
 Seed-Service -ServiceName "cart-service" -Command "seed_carts"
 Seed-Service -ServiceName "order-service" -Command "seed_orders"
 

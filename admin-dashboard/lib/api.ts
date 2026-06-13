@@ -31,13 +31,13 @@ export const services: Service[] = [
         description: 'Quản lý danh mục sách'
     },
     {
-        id: 'book',
-        name: 'Book Service',
-        displayName: 'Sách',
-        endpoint: '/api/books/books/',
-        icon: '📖',
-        color: 'bg-green-500',
-        description: 'Quản lý thông tin sách'
+        id: 'product',
+        name: 'Product Service',
+        displayName: 'Sản phẩm',
+        endpoint: '/api/products/products/',
+        icon: '🛍️',
+        color: 'bg-violet-500',
+        description: 'Quản lý sách · điện tử · thời trang'
     },
     {
         id: 'customer',

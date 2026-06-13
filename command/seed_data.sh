@@ -37,7 +37,7 @@ seed_service "customer-service" "seed_customers"
 echo ""
 echo "=== Phase 2: Seeding dependent data ==="
 
-seed_service "book-service" "seed_books"
+seed_service "product-service" "seed_products"
 seed_service "cart-service" "seed_carts"
 seed_service "order-service" "seed_orders"
 

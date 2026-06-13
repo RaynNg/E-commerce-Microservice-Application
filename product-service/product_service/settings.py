@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-book_service-secret-key-change-in-prod"
+SECRET_KEY = "django-insecure-product_service-secret-key-change-in-prod"
 
 DEBUG = True
 
@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
-    "books",
+    "products",
 ]
 
 MIDDLEWARE = [
@@ -31,7 +31,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "book_service.urls"
+ROOT_URLCONF = "product_service.urls"
 
 TEMPLATES = [
     {
@@ -49,7 +49,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "book_service.wsgi.application"
+WSGI_APPLICATION = "product_service.wsgi.application"
 
 # Database configuration - PostgreSQL when running in Docker, SQLite for local dev
 if os.environ.get('DB_HOST'):

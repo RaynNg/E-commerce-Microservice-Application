@@ -9,7 +9,7 @@ from .serializers import OrderSerializer, CreateOrderSerializer
 from .saga import OrderSagaOrchestrator
 
 CART_SERVICE_URL = os.environ.get("CART_SERVICE_URL", "http://cart-service:8000")
-BOOK_SERVICE_URL = os.environ.get("BOOK_SERVICE_URL", "http://book-service:8000")
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000")
 
 
 def health_check(request):
@@ -66,7 +66,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order_items = []
         for item in cart_data["items"]:
             try:
-                book_resp = requests.get(f"{BOOK_SERVICE_URL}/api/books/{item['book_id']}/", timeout=5)
+                book_resp = requests.get(f"{PRODUCT_SERVICE_URL}/api/books/{item['book_id']}/", timeout=5)
                 book = book_resp.json()
                 price = float(book["price"])
             except requests.RequestException:
@@ -111,7 +111,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         for oi in order_items:
             try:
                 requests.post(
-                    f"{BOOK_SERVICE_URL}/api/books/{oi['book_id']}/update_stock/",
+                    f"{PRODUCT_SERVICE_URL}/api/books/{oi['book_id']}/update_stock/",
                     json={"quantity": -oi["quantity"]},
                     timeout=5,
                 )

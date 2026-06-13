@@ -22,7 +22,7 @@ export default function Footer() {
               <span className="text-xl font-bold">ShopMicro</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Sàn thương mại điện tử hàng đầu Việt Nam — sách, laptop, thời trang
+              Sàn thương mại điện tử hàng đầu Việt Nam — sách, điện tử, thời trang
               với giá cả cạnh tranh và giao hàng nhanh chóng.
             </p>
           </div>

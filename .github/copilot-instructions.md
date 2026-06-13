@@ -16,7 +16,7 @@ This is a microservices-based bookstore management system built with Django REST
 ### Backend Services (Django REST Framework)
 
 1. **catalog-service** (port 8004) - Book categories management
-2. **book-service** (port 8005) - Book inventory and details
+2. **product-service** (port 8005) - Product inventory and details (books, laptops, fashion)
 3. **customer-service** (port 8003) - Customer account management
 4. **staff-service** (port 8001) - Staff/employee management
 5. **manager-service** (port 8002) - Manager/admin management

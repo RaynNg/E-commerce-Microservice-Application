@@ -61,7 +61,7 @@ docker-compose exec [service-name] python manage.py seed_[model]
 **Examples:**
 ```bash
 docker-compose exec catalog-service python manage.py seed_catalogs
-docker-compose exec book-service python manage.py seed_books
+docker-compose exec product-service python manage.py seed_products
 docker-compose exec customer-service python manage.py seed_customers
 ```
 
@@ -175,7 +175,7 @@ docker-compose exec postgres-catalog psql -U postgres -d catalog_db
 - `manager_db` - Manager service
 - `customer_db` - Customer service
 - `catalog_db` - Catalog service
-- `book_db` - Book service
+- `product_db` - Product service
 - `cart_db` - Cart service
 - `order_db` - Order service
 - `pay_db` - Payment service
@@ -241,7 +241,7 @@ bookstore_microservice/
 ├── .github/
 │   └── copilot-instructions.md    # GitHub Copilot config
 ├── api-gateway/                    # API Gateway service
-├── book-service/                   # Book management
+├── product-service/                # Product management
 ├── catalog-service/                # Catalog management
 ├── customer-service/               # Customer management
 ├── staff-service/                  # Staff management

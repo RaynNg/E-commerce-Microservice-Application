@@ -1,5 +1,5 @@
 """
-Sync sản phẩm từ book-service vào ProductIndex.
+Sync sản phẩm từ product-service vào ProductIndex.
 Chạy: python manage.py sync_product_index
 """
 import os
@@ -16,14 +16,14 @@ class Command(BaseCommand):
                             help='Xóa index cũ và build lại từ đầu')
 
     def handle(self, *args, **options):
-        book_service_url = os.environ.get('BOOK_SERVICE_URL', 'http://book-service:8000')
+        product_service_url = os.environ.get('PRODUCT_SERVICE_URL', 'http://product-service:8000')
 
         if options['rebuild']:
             ProductIndex.objects.all().delete()
             self.stdout.write('Đã xóa index cũ.')
 
         try:
-            resp = requests.get(f"{book_service_url}/api/products/", timeout=30)
+            resp = requests.get(f"{product_service_url}/api/products/", timeout=30)
             resp.raise_for_status()
             data = resp.json()
             products = data.get('results', data) if isinstance(data, dict) else data

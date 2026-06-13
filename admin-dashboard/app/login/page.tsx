@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { loginStaff } from "@/lib/staff-auth";
+import { isStaffAuthenticated, loginStaff } from "@/lib/staff-auth";
 import { AlertCircle, Loader2, ShieldCheck } from "lucide-react";
+
+const AFTER_LOGIN = "/service/product";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +17,13 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Already logged in → skip this page
+  useEffect(() => {
+    if (isStaffAuthenticated()) {
+      router.replace(AFTER_LOGIN);
+    }
+  }, []);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -22,7 +31,7 @@ export default function LoginPage() {
 
     try {
       await loginStaff(username, password);
-      router.push("/service/book");
+      router.replace(AFTER_LOGIN);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Đăng nhập thất bại";
       setError(message);
@@ -40,7 +49,7 @@ export default function LoginPage() {
           </div>
           <CardTitle>Đăng nhập staff</CardTitle>
           <CardDescription>
-            Dùng tài khoản nhân viên để quản lý sách trong admin dashboard.
+            Dùng tài khoản nhân viên để quản lý sản phẩm trong admin dashboard.
           </CardDescription>
         </CardHeader>
         <CardContent>

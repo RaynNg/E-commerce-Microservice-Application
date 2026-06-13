@@ -11,7 +11,7 @@ A microservice-based bookstore built with **Django REST Framework**, **Docker Co
 | 3   | **manager-service**        | 8002 | Manager user management (CRUD)                          |
 | 4   | **customer-service**       | 8003 | Customer registration (auto-creates cart) & login       |
 | 5   | **catalog-service**        | 8004 | Book categories/catalogs                                |
-| 6   | **book-service**           | 8005 | Book CRUD (managed by staff), search, stock             |
+| 6   | **product-service**        | 8005 | Product CRUD (books, laptops, fashion), search, stock   |
 | 7   | **cart-service**           | 8006 | Shopping cart add/view/update/remove                    |
 | 8   | **order-service**          | 8007 | Order creation (triggers payment & shipping)            |
 | 9   | **ship-service**           | 8008 | Shipment tracking & status                              |
@@ -94,12 +94,12 @@ All communication between services is done via **REST HTTP calls** using Python 
 
 - **customer-service → cart-service**: Auto-create cart on registration
 - **order-service → cart-service**: Fetch cart items
-- **order-service → book-service**: Fetch prices, update stock
+- **order-service → product-service**: Fetch prices, update stock
 - **order-service → pay-service**: Create payment
 - **order-service → ship-service**: Create shipment
-- **cart-service → book-service**: Enrich cart items with book details
+- **cart-service → product-service**: Enrich cart items with product details
 - **recommender-ai-service → comment-rate-service**: Fetch all ratings
-- **recommender-ai-service → book-service**: Fetch book details
+- **recommender-ai-service → product-service**: Fetch product details
 - **api-gateway → all services**: Proxy HTTP requests
 
 ## Technical Stack

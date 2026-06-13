@@ -8,7 +8,7 @@ Phase 1 — CSV-based graph (user behavior from data_user500.csv):
   (Product)-[:CO_PURCHASED_WITH {count}]->(Product)
   (Product)-[:CO_VIEWED_WITH    {count}]->(Product)
 
-Phase 2 — Service-based graph (from comment-rate-service & book-service):
+Phase 2 — Service-based graph (from comment-rate-service & product-service):
   (:Customer {id})
   (:Book     {id, title, catalog_id, price})
   (Customer)-[:RATED {rating, comment, created_at}]->(Book)
@@ -26,7 +26,7 @@ NEO4J_USER     = os.environ.get("NEO4J_USER",     "neo4j")
 NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD", "bookstore123")
 
 COMMENT_SERVICE_URL = os.environ.get("COMMENT_SERVICE_URL", "http://comment-rate-service:8000")
-BOOK_SERVICE_URL    = os.environ.get("BOOK_SERVICE_URL",    "http://book-service:8000")
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://product-service:8000")
 
 CSV_CANDIDATES = [
     "/app/data_user500.csv",
@@ -67,8 +67,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING("[Phase 1] data_user500.csv not found — skipping"))
 
             # Phase 2: Service-based Customer/Book/RATED/SIMILAR_TO graph
-            self.stdout.write("[Phase 2] Fetching books from book-service…")
-            books = self._fetch_with_retry(f"{BOOK_SERVICE_URL}/api/books/", params={"limit": 500})
+            self.stdout.write("[Phase 2] Fetching books from product-service…")
+            books = self._fetch_with_retry(f"{PRODUCT_SERVICE_URL}/api/books/", params={"limit": 500})
             if isinstance(books, dict):
                 books = books.get("results", [])
 

@@ -15,7 +15,7 @@ def health_check(request):
         db_status = "ok"
     except Exception:
         db_status = "error"
-    return JsonResponse({"status": "ok", "service": "book-service", "db": db_status})
+    return JsonResponse({"status": "ok", "service": "product-service", "db": db_status})
 
 
 urlpatterns = [
